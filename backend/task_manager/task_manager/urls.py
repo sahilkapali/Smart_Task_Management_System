@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('api/', include('tasks.urls')),
 
+    path('api/users/', include('users.urls')),
+
 ]
