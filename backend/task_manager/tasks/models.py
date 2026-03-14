@@ -15,8 +15,4 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-<<<<<<< HEAD
         return self.title
-=======
-        return self.title
->>>>>>> 222f34997776a48e9abd5465f99a1561aa6c82cc
