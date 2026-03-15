@@ -89,7 +89,6 @@ class LoginSerializer(serializers.Serializer):
 # ─────────────────────────────────────────────
 
 class TaskSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Task
         fields = ['id', 'user', 'title', 'description', 'status', 'created_at']

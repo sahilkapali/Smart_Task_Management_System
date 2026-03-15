@@ -1,20 +1,24 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from .views import (
-    CustomLoginView,
     RegisterView,
-    UserProfileView,
     LoginView,
     LogoutView,
-    ChangePasswordView,
+    UserProfileView,
+    ChangePasswordView
 )
 
 urlpatterns = [
-    path('register/',        RegisterView.as_view(),       name='user-register'),
-    path('login/',           LoginView.as_view(),           name='user-login'),
-    path('token/refresh/',   TokenRefreshView.as_view(),    name='token-refresh'),
-    path('logout/',          LogoutView.as_view(),          name='user-logout'),
-    path('profile/',         UserProfileView.as_view(),     name='user-profile'),
-    path('change-password/', ChangePasswordView.as_view(),  name='change-password'),
+    # Authentication (public)
+    path('auth/register/', RegisterView.as_view(), name='auth-register'),
+    path('auth/login/', LoginView.as_view(), name='auth-login'),
+
+    # Authentication (protected)
+    path('auth/logout/', LogoutView.as_view(), name='auth-logout'),
+    path('auth/profile/', UserProfileView.as_view(), name='auth-profile'),
+    path('auth/change-password/', ChangePasswordView.as_view(), name='auth-change-password'),
+
+    # JWT Token Management
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 ]

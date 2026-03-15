@@ -1,14 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from rest_framework import serializers
 
-
-# ─────────────────────────────────────────────
 #  Registration
-# ─────────────────────────────────────────────
 
-# 1. This is your original Registration Serializer (bringing it back!)
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """
     Registers a new user.
@@ -32,8 +27,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'email': {'required': True},
         }
 
-    # ── field-level validation ──────────────────────────────────────────
-
+    # Field-level validation
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError('This username is already taken.')
@@ -44,15 +38,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('An account with this email already exists.')
         return value
 
-    # ── object-level validation ─────────────────────────────────────────
-
+    # Object-level validation
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({'password': 'Passwords do not match.'})
         return attrs
 
-    # ── creation ────────────────────────────────────────────────────────
-
+    # Creation
     def create(self, validated_data):
         validated_data.pop('password2')
         user = User.objects.create_user(
@@ -63,9 +55,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-# ─────────────────────────────────────────────
 #  Login
-# ─────────────────────────────────────────────
 
 class UserLoginSerializer(serializers.Serializer):
     """
@@ -79,18 +69,24 @@ class UserLoginSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
+        # Fetch the user manually to check for inactive status before authenticating
+        user_obj = User.objects.filter(username=attrs['username']).first()
+        
+        if user_obj and user_obj.check_password(attrs['password']):
+            if not user_obj.is_active:
+                raise serializers.ValidationError('This account has been deactivated.')
+        
+        # Now use authenticate for standard safety/backend checking
         user = authenticate(username=attrs['username'], password=attrs['password'])
+        
         if not user:
             raise serializers.ValidationError('Invalid username or password.')
-        if not user.is_active:
-            raise serializers.ValidationError('This account has been deactivated.')
+            
         attrs['user'] = user
         return attrs
 
 
-# ─────────────────────────────────────────────
 #  Profile read / update
-# ─────────────────────────────────────────────
 
 class UserProfileSerializer(serializers.ModelSerializer):
     """
@@ -121,9 +117,7 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         return value
 
 
-# ─────────────────────────────────────────────
 #  Password change
-# ─────────────────────────────────────────────
 
 class ChangePasswordSerializer(serializers.Serializer):
     """
