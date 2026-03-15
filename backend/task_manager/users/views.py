@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -157,3 +158,8 @@ class ChangePasswordView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+=======
+from django.shortcuts import render
+
+# Create your views here.
+>>>>>>> 2ec1cf972b40c8cc42b0d1c2fd7982358d09fd50
