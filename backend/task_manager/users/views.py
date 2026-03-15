@@ -3,7 +3,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response 
 from rest_framework.views import APIView 
 from django.contrib.auth.models import User
-from .serializers import UserRegistrationSerializer
+from .serializers import MyTokenObtainPairSerializer, UserRegistrationSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -20,3 +21,6 @@ class UserProfileView(APIView):
             "email": user.email,
             "message": "You have successfully accessed a protected route!"
         })
+
+class CustomLoginView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
