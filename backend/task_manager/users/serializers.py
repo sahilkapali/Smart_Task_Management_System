@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -7,6 +8,7 @@ from rest_framework import serializers
 #  Registration
 # ─────────────────────────────────────────────
 
+# 1. This is your original Registration Serializer (bringing it back!)
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """
     Registers a new user.

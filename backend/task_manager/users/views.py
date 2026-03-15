@@ -4,32 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
-
-from .serializers import (
-    UserRegistrationSerializer,
-    UserLoginSerializer,
-    UserProfileSerializer,
-    UserProfileUpdateSerializer,
-    ChangePasswordSerializer,
-)
-
-
-# ─────────────────────────────────────────────
-#  Helper
-# ─────────────────────────────────────────────
-
-def get_tokens_for_user(user):
-    """Return a JWT access + refresh token pair for *user*."""
-    refresh = RefreshToken.for_user(user)
-    return {
-        'refresh': str(refresh),
-        'access':  str(refresh.access_token),
-    }
-
-
-# ─────────────────────────────────────────────
-#  Register
-# ─────────────────────────────────────────────
+from .serializers import UserRegistrationSerializer
 
 class RegisterView(generics.CreateAPIView):
     """
@@ -229,3 +204,6 @@ class ChangePasswordView(APIView):
             {'message': 'Password changed successfully. Please log in again with your new password.'},
             status=status.HTTP_200_OK,
         )
+
+class CustomLoginView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
