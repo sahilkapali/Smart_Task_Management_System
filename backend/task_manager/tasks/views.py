@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Task
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, RegisterSerializer, LoginSerializer
 
 #  Task Views
 
